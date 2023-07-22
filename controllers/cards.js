@@ -19,7 +19,7 @@ const createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка данных' });
+        res.status(400).send({ message: 'Ошибка в данных карты' });
         return;
       }
       res.status(500).send({ message: 'Произошла ошибка' });
@@ -33,12 +33,12 @@ const deleteCard = (req, res) => {
       if (card) {
         res.status(200).send({ data: card });
       } else {
-        res.status(404).send({ message: 'Карточка не найдена' });
+        res.status(404).send({ message: 'Карта не найдена' });
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка данных' });
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Ошибка в id карты' });
         return;
       }
       res.status(500).send({ message: 'Произошла ошибка' });
@@ -55,12 +55,12 @@ const likeCard = (req, res) => {
       if (card) {
         res.status(200).send({ data: card });
       } else {
-        res.status(404).send({ message: 'Карточка не найдена' });
+        res.status(404).send({ message: 'Карта не найдена' });
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка данных' });
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Ошибка в id карты' });
         return;
       }
       res.status(500).send({ message: 'Произошла ошибка' });
@@ -77,15 +77,15 @@ const dislikeCard = (req, res) => {
       if (card) {
         res.status(200).send({ data: card });
       } else {
-        res.status(404).send({ message: 'Карточка не найдена' });
+        res.status(404).send({ message: 'Карта не найдена' });
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка данных' });
-        return;
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Ошибка в id карты' });
+      } else {
+        res.status(500).send({ message: 'Произошла ошибка' });
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
     });
 };
 

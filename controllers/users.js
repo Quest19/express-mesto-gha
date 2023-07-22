@@ -21,11 +21,10 @@ const getUser = (req, res) => {
       }
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка в данных пользователя' });
-        return;
+      if (err.name === 'CastError') {
+        return res.status(400).send({ message: 'Ошибка в id пользователя' });
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(500).send({ message: 'Произошла ошибка сервера' });
     });
 };
 
