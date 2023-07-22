@@ -22,7 +22,8 @@ const getUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'Ошибка в id пользователя' });
+        res.status(400).send({ message: 'Ошибка в id пользователя' });
+        return;
       }
       res.status(500).send({ message: 'Произошла ошибка сервера' });
     });
