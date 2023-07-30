@@ -1,12 +1,16 @@
 const User = require('../models/user');
 
+const ERROR_CODE = 400;
+const ERROR_NOT_FOUND = 404;
+const ERROR_SERVER = 500;
+
 const getAllUsers = (req, res) => {
   User.find({})
     .then((users) => {
       res.status(200).send({ data: users });
     })
     .catch(() => {
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -17,15 +21,15 @@ const getUser = (req, res) => {
       if (user) {
         res.status(200).send({ data: user });
       } else {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь не найден' });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Ошибка в id пользователя' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в id пользователя' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка сервера' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка сервера' });
     });
 };
 
@@ -37,10 +41,10 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка в данных пользователя' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в данных пользователя' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -52,15 +56,15 @@ const updateUser = (req, res) => {
       if (user) {
         res.status(200).send({ data: user });
       } else {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь не найден' });
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка в данных пользователя' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в данных пользователя' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -72,15 +76,15 @@ const updateAvatar = (req, res) => {
       if (user) {
         res.status(200).send({ data: user });
       } else {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Пользователь не найден' });
       }
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка в данных пользователя' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в данных пользователя' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 

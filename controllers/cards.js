@@ -1,12 +1,16 @@
 const Card = require('../models/card');
 
+const ERROR_CODE = 400;
+const ERROR_NOT_FOUND = 404;
+const ERROR_SERVER = 500;
+
 const getAllCards = (req, res) => {
   Card.find({})
     .then((cards) => {
       res.status(200).send({ data: cards });
     })
     .catch(() => {
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -19,10 +23,10 @@ const createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Ошибка в данных карты' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в данных карты' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -33,15 +37,15 @@ const deleteCard = (req, res) => {
       if (card) {
         res.status(200).send({ data: card });
       } else {
-        res.status(404).send({ message: 'Карта не найдена' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Карта не найдена' });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Ошибка в id карты' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в id карты' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -55,15 +59,15 @@ const likeCard = (req, res) => {
       if (card) {
         res.status(200).send({ data: card });
       } else {
-        res.status(404).send({ message: 'Карта не найдена' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Карта не найдена' });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Ошибка в id карты' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в id карты' });
         return;
       }
-      res.status(500).send({ message: 'Произошла ошибка' });
+      res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
     });
 };
 
@@ -77,14 +81,14 @@ const dislikeCard = (req, res) => {
       if (card) {
         res.status(200).send({ data: card });
       } else {
-        res.status(404).send({ message: 'Карта не найдена' });
+        res.status(ERROR_NOT_FOUND).send({ message: 'Карта не найдена' });
       }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Ошибка в id карты' });
+        res.status(ERROR_CODE).send({ message: 'Ошибка в id карты' });
       } else {
-        res.status(500).send({ message: 'Произошла ошибка' });
+        res.status(ERROR_SERVER).send({ message: 'Произошла ошибка' });
       }
     });
 };
