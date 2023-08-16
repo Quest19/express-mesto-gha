@@ -95,9 +95,9 @@ const login = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Ошибка в данных');
+        throw new BadRequestError('Ошибка в данных пользователя');
       } else {
-        throw new UnauthorisedError('Ошибка аутентификации');
+        throw new UnauthorisedError('Ошибка в аутентификации');
       }
     })
     .catch(next);
