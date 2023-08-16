@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictingRequestError = require('../errors/ConflictingRequestError');
+const UnauthorisedError = require('../errors/UnauthorisedError');
 
 const getAllUsers = (req, res, next) => {
   User.find({})
@@ -91,6 +92,13 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
       res.send({ token });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        throw new BadRequestError('Ошибка в данных');
+      } else {
+        throw new UnauthorisedError('Ошибка аутентификации');
+      }
     })
     .catch(next);
 };
