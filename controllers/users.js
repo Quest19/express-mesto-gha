@@ -4,7 +4,6 @@ const User = require('../models/user');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictingRequestError = require('../errors/ConflictingRequestError');
-const UnauthorisedError = require('../errors/UnauthorisedError');
 
 const getAllUsers = (req, res, next) => {
   User.find({})
@@ -17,8 +16,7 @@ const getAllUsers = (req, res, next) => {
 };
 
 const getUser = (req, res, next) => {
-  const userIdFinal = req.params.userId === 'me' ? req.user._id : req.params.userId;
-  User.findById(userIdFinal)
+  User.findById(req.params.userId)
     .then((user) => {
       if (user) {
         res.status(200).send({ data: user });
@@ -35,7 +33,6 @@ const getUser = (req, res, next) => {
 };
 
 const getActualUser = (req, res, next) => {
-  console.log(req);
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -92,13 +89,6 @@ const login = (req, res, next) => {
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
       res.send({ token });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new BadRequestError('Ошибка в данных пользователя');
-      } else {
-        throw new UnauthorisedError('Ошибка в аутентификации');
-      }
     })
     .catch(next);
 };

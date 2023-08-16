@@ -8,6 +8,7 @@ const routerCard = require('./routes/cards');
 const { createUser, login } = require('./controllers/users');
 const auth = require('./middlewares/auth');
 const errorHandler = require('./middlewares/errorHandler');
+const NotFoundError = require('./errors/NotFoundError');
 
 const { PORT = 3000 } = process.env;
 
@@ -39,7 +40,7 @@ app.use('/users', routerUser);
 app.use('/cards', routerCard);
 
 app.use('*', (req, res) => {
-  res.status(404).send({ message: 'Такого пути нет' });
+  throw new NotFoundError('Такого пути нет');
 });
 
 app.use(errors());

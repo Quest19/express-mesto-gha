@@ -36,21 +36,22 @@ const deleteCard = (req, res, next) => {
     .then((card) => {
       if (!card) {
         throw new NotFoundError('Карта не найдена');
-      }
-      if (card.owner.toString() !== user) {
+      } else if (card.owner.toString() !== user) {
         return next(new ForbiddenError('Вы не можете удалить чужую карту'));
+      } else {
+        Card.findByIdAndRemove(req.params.cardId)
+          .then((card) => {
+            res.status(200).send({ data: card });
+          })
+          .catch((err) => {
+            if (err.name === 'CastError') {
+              return next(new BadRequestError('Ошибка в id карты'));
+            }
+            return next(err);
+          });
       }
-      Card.findByIdAndRemove(req.params.cardId)
-        .then((card) => {
-          res.status(200).send({ data: card });
-        });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return next(new BadRequestError('Ошибка в id карты'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const likeCard = (req, res, next) => {
