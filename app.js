@@ -1,7 +1,6 @@
 const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { celebrate, Joi, errors } = require('celebrate');
 const routerUser = require('./routes/users');
 const routerCard = require('./routes/cards');
@@ -39,8 +38,8 @@ app.use(auth);
 app.use('/users', routerUser);
 app.use('/cards', routerCard);
 
-app.use('*', (req, res) => {
-  throw new NotFoundError('Такого пути нет');
+app.use('*', (req, res, next) => {
+  next(new NotFoundError('Такого пути нет'));
 });
 
 app.use(errors());
